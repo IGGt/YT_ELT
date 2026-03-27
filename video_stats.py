@@ -9,7 +9,7 @@ load_dotenv(dotenv_path="./.env")
 
 API_KEY = os.getenv("API_KEY")
 CHANNEL_HANDLE = "MrBeast"
-max_results = 5
+max_results = 1
 
 def get_playlistId():
 
