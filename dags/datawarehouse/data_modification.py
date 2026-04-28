@@ -1,9 +1,9 @@
 import logging
 
-logger = logging.getLoger(__name__)
+logger = logging.getLogger(__name__)
 table = "yt_api"
 
-def inerst_rows(cur, conn, schema, row):
+def insert_rows(cur, conn, schema, row):
 
     try:
 
@@ -37,7 +37,7 @@ def inerst_rows(cur, conn, schema, row):
         raise e
     
 
-def insert_rows(cur, conn, schema, row):
+def update_rows(cur, conn, schema, row):
 
     try:
         # staging
@@ -49,7 +49,7 @@ def insert_rows(cur, conn, schema, row):
             likes_count = 'likeCount'
             comment_count = 'commentCount'
         # core
-        else
+        else:
             video_id = 'Video_ID'
             upload_date = 'Upload_Date'
             video_title = 'video_Title'
@@ -64,7 +64,7 @@ def insert_rows(cur, conn, schema, row):
                 "Video_Views" = %({video_views})s,
                 "Likes_Count" = %({likes_count})s,
                 "Comments_Count" = %({comments_count})s
-            WHERE "Video_ID" = %({video_id})s AND "Upload_Date" = %({iupload_date})s;
+            WHERE "Video_ID" = %({video_id})s AND "Upload_Date" = %({upload_date})s;
             """, row
         )
 
@@ -81,7 +81,7 @@ def delete_rows(cur, conn, schema, ids_to_delete):
 
     try:
 
-        ids_to_delete = f"""({', '.join(f"'(id)'" for id in ides_to_delete)})"""
+        ids_to_delete = f"""({', '.join(f"'(id)'" for id in ids_to_delete)})"""
 
         cur.execute(
             f"""
