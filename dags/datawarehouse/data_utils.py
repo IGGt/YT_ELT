@@ -1,13 +1,13 @@
-from airflow.providers.postgres.hooks.postgres import postgreshook
-from pyscopg2.extras import RealDictCursor
+from airflow.providers.postgres.hooks.postgres import PostgresHook 
+from psycopg2.extras import RealDictCursor
 
 table = "yt_api"
 
 
 def get_conn_cursor():
-    hook = postgreshook(postgres_conn_id="postgres_db_yt_elt", database="elt_db")
-    conn = hook,get_conn()
-    cur = conn.cursor(cursfor_factory=RealDictCursor)
+    hook = PostgresHook(postgres_conn_id="postgres_db_yt_elt", database="elt_db")
+    conn = hook.get_conn()
+    cur = conn.cursor(cursor_factory=RealDictCursor)
     return conn, cur
 
 
