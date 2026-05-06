@@ -19,7 +19,8 @@ def get_playlistId():
 
     try:
 
-        url = f"https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle={CHANNEL_HANDLE}&key={API_KEY}"
+        #url = f"https://youtube.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle={CHANNEL_HANDLE}&key={API_KEY}"
+        url = f"https://www.googleapis.com/youtube/v3/channels?part=contentDetails&forHandle={CHANNEL_HANDLE}&key={API_KEY}"
 
         response = requests.get(url)
 
@@ -47,7 +48,8 @@ def get_video_ids(playlistId):
 
     pageToken = None
 
-    base_url = f"https://youtube.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults={max_results}&playlistId={playlistId}&key={API_KEY}"
+    #base_url = f"https://youtube.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults={max_results}&playlistId={playlistId}&key={API_KEY}"
+    base_url = f"https://www.googleapis.com/youtube/v3/playlistItems?part=contentDetails&maxResults={max_results}&playlistId={playlistId}&key={API_KEY}"
 
     try:
 
@@ -56,7 +58,7 @@ def get_video_ids(playlistId):
             url = base_url
 
             if pageToken:
-                url += f"&pageToken-{pageToken}"
+                url += f"&pageToken={pageToken}"
 
             response = requests.get(url)
 
@@ -90,8 +92,8 @@ def extract_video_data(video_ids):
         for batch in batch_list(video_ids, max_results):
             video_ids_str = ",".join(batch)
 
-            url = f"https://youtube.googleapis.com/youtube/v3/playlists?part=contentDetails&part=snippet&part=statistics&id={video_ids_str}&key={API_KEY}"
-
+            #url = f"https://youtube.googleapis.com/youtube/v3/playlists?part=contentDetails&part=snippet&part=statistics&id={video_ids_str}&key={API_KEY}"
+            url = f"https://www.googleapis.com/youtube/v3/videos?part=contentDetails&part=snippet&part=statistics&id={video_ids_str}&key={API_KEY}"
             response = requests.get(url)
 
             response.raise_for_status()
@@ -102,11 +104,11 @@ def extract_video_data(video_ids):
                 video_id = item['id']
                 snippet = item['snippet']
                 contentDetails = item['contentDetails']
-                statistics = item['statistic']
+                statistics = item['statistics']
 
                 video_data = {
                     "video_id": video_id,
-                    "title": snippet['titie'],
+                    "title": snippet['title'],
                     "publishedAt": snippet['publishedAt'],
                     "duration": contentDetails['duration'],
                     "viewCount": statistics.get('viewCount', None),

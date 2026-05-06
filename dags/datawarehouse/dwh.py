@@ -7,7 +7,7 @@ import logging
 from airflow.decorators import task
 
 logger = logging.getLogger(__name__)
-table = "ty_api"
+table = "yt_api"
 
 @task
 def staging_table():
@@ -32,7 +32,7 @@ def staging_table():
             if len(table_ids) == 0:
                 insert_rows(cur,conn,schema,row)
             else:
-                if row['viddeo_id'] in table_ids:
+                if row['video_id'] in table_ids:
                     update_rows(cur,conn,schema,row)
                 else:
                     insert_rows(cur,conn,schema,row)
@@ -81,7 +81,7 @@ def core_table():
 
         for row in rows:
 
-            current_video_ids.add(row["Video_ID"])
+            current_video_ids.add(row["Video_id"])
 
             if len(table_ids) == 0:
                 transformed_row = transform_data(row)
