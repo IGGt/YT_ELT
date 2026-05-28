@@ -9,6 +9,7 @@ from api.video_stats import (
 )
 
 from datawarehouse.dwh import staging_table, core_table
+from dataquality.soda import yt_elt_data_quality
 
 local_tz = pendulum.timezone("Europe/London")
 
@@ -25,6 +26,9 @@ default_args = {
     "start_date": datetime(2025, 1, 1, tzinfo=local_tz),
     # 'end_date': datetime(2030, 12, 31, tzinfo=local_tz),
 }
+
+staging_schema = "staging"
+core_schema = "core"
 
 with DAG(
     dag_id='produce_json',
@@ -58,3 +62,20 @@ with DAG(
 
     # Define dependencies
     update_staging >> update_core
+
+
+with DAG(
+    dag_id='data_quality',
+    default_args=default_args,
+    description='DAG check the quality on both layers in the database',
+    schedule='0 16 * * *',
+    catchup=False    
+) as dag:
+
+    # Define Tasks
+    soda_validate_staging = yt_elt_data_quality(staging_schema)
+    soda_validate_core = yt_elt_data_quality(core_schema)
+
+    # Define dependencies
+    soda_validate_staging >> soda_validate_core
+
