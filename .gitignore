@@ -4,3 +4,4 @@ docker_compose_files/
 .env
 logs/
 .gitconfig
+data/
